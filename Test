@@ -1,0 +1,37 @@
+from graphviz import Digraph
+
+# Create UML Diagram
+uml = Digraph("AvoidItGame_UML", format="pdf")
+
+# Abstract Classes
+uml.node("GameObject", "GameObject\n+ size: int\n+ location: Point\n+ color: int\n+ getSize()\n+ getLocation()\n+ getColor()", shape="rectangle", style="filled", fillcolor="lightgray")
+uml.node("Fixed", "Fixed\n(Inherits from GameObject)", shape="rectangle", style="filled", fillcolor="lightgray")
+uml.node("Movable", "Movable\n(Inherits from GameObject)\n+ heading: int\n+ speed: int\n+ move()", shape="rectangle", style="filled", fillcolor="lightgray")
+
+# Concrete Classes
+uml.node("Flag", "Flag\n(Inherits from Fixed)\n+ sequenceNumber: int", shape="rectangle", style="filled", fillcolor="lightblue")
+uml.node("FoodStation", "FoodStation\n(Inherits from Fixed)\n+ capacity: int", shape="rectangle", style="filled", fillcolor="lightblue")
+uml.node("Ant", "Ant\n(Inherits from Movable, Implements IFoodie)\n+ maxSpeed: int\n+ foodConsumptionRate: int\n+ healthLevel: int\n+ lastFlagReached: int\n+ accelerate()\n+ brake()\n+ changeHeading()\n+ consumeFood()", shape="rectangle", style="filled", fillcolor="lightgreen")
+uml.node("Spider", "Spider\n(Inherits from Movable)\n+ randomHeadingChange()\n+ interactWithAnt()", shape="rectangle", style="filled", fillcolor="lightpink")
+
+# Interface
+uml.node("IFoodie", "IFoodie\n+ setFoodConsumption()", shape="ellipse", style="filled", fillcolor="lightyellow")
+
+# Game Management
+uml.node("GameWorld", "GameWorld\n+ init()\n+ addObject()\n+ getObjects()\n+ tick()\n+ processCommand()", shape="rectangle", style="filled", fillcolor="lightcoral")
+uml.node("Game", "Game\n(Extends Form)\n+ play()", shape="rectangle", style="filled", fillcolor="lightcoral")
+uml.node("Starter", "Starter\n+ start()", shape="rectangle", style="filled", fillcolor="lightcoral")
+
+# Relationships
+uml.edge("GameObject", "Fixed", arrowhead="empty", label="inherits")
+uml.edge("GameObject", "Movable", arrowhead="empty", label="inherits")
+uml.edge("Fixed", "Flag", arrowhead="empty", label="inherits")
+uml.edge("Fixed", "FoodStation", arrowhead="empty", label="inherits")
+uml.edge("Movable", "Ant", arrowhead="empty", label="inherits")
+uml.edge("Movable", "Spider", arrowhead="empty", label="inherits")
+
+uml.edge("Ant", "IFoodie", arrowhead="diamond", label="implements")
+
+uml.edge("GameWorld", "GameObject", arrowhead="diamond", label="manages")
+uml.edge("Game", "GameWorld", arrowhead="diamond", label="controls")
+uml.edge("Starter", "Game", arrowhead="diamond", label="creates")
